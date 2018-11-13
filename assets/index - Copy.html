@@ -19,12 +19,12 @@
     .row {
     margin: 0;
     padding: 0;
-    }
+    }  
 
     #add-train {
     margin: 20px;
     }
-</style>
+    </style>
 </head>
 
 <body>
@@ -49,7 +49,7 @@
                             <th>Minutes Away</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="schedule">
                         <tr>
                             <td>Trenton Express</td>
                             <td>Trenton</td>
@@ -173,52 +173,68 @@
             console.log(firstTrain)
             console.log(frequency)
 
+                var newRow = $("<tr>").append(
+                    $("<td>").text(name),
+                    $("<td>").text(destination),
+                    $("<td>").text(frequency)
+                )
+
+                $(".table>tbody").append(newRow)
+
 
 
             // Calculate the months worked using hardcore math
             // To calculate the months worked
 
+            function calculateNextArrival() {
+
+                $(".table>tbody").empty()
+
+                // First Time (pushed back 1 year to make sure it comes before current time)
+                var firstTrainConvert = moment(firstTrain, "HH:mm").subtract(1, "years")
 
 
-            // First Time (pushed back 1 year to make sure it comes before current time)
-            var firstTrainConvert = moment(firstTrain, "HH:mm").subtract(1, "years")
-            console.log(MinutesAway)
-            console.log(NextArrival)
+                // Current Time
+                var currentTime = moment()
+                console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
-            // Current Time
-            var currentTime = moment()
-            console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+                // Difference between the times
+                var difTime = moment().diff(firstTrainConvert, "minutes");
+                console.log("DIFFERENCE IN TIME: " + difTime);
 
-            // Difference between the times
-            var difTime = moment().diff(firstTrainConvert, "minutes");
-            console.log("DIFFERENCE IN TIME: " + difTime);
+                // Time apart (remainder)   
+                var remainder = difTime % frequency;
+                console.log(remainder);
 
-            // Time apart (remainder)   
-            var remainder = difTime % frequency;
-            console.log(remainder);
+                // Minute Until Train
+                var minutesAway = frequency - remainder;
+                console.log(minutesAway)
 
-            // Minute Until Train
-            var minutesAway = frequency - remainder;
-            console.log(minutesAway)
+                // Next Train
+                var nextTrain = moment().add(minutesAway, "minutes")
+                console.log(nextTrain)
 
-            // Next Train
-            var nextTrain = moment().add(minutesAway, "minutes")
-            console.log(nextTrain)
+                var arrival = moment(nextTrain).format("HH:mm")
 
-            var arrival = moment(nextTrain).format("HH:mm")
+                // display train information to train timetable
+                var newRow = $("<tr>").append(
 
-            // display train information to train timetable
-            var newRow = $("<tr>").append(
-                $("<td>").text(name),
-                $("<td>").text(destination),
-                $("<td>").text(frequency),
-                $("<td>").text(arrival),
-                $("<td>").text(minutesAway)
-            )
+                    $("<td>").text(arrival),
+                    $("<td>").text(minutesAway)
+                )
 
-            $(".table>tbody").append(newRow)
+                $(".table>tbody").append(newRow)
+
+            }
+
+            var interval = setInterval(calculateNextArrival, 60000)
 
         })
+
+        
+
+
+
 
     </script>
 </body>
