@@ -6,4 +6,4 @@
  Once you've got your train info on the timetable board, the time will refresh every 1 munite so that you can get the most accurate time info and won't miss your train.
 
 
-### [here](https://vivianuol.github.io/Train/) is the application.
+##### [Here](https://vivianuol.github.io/Train/) is the application.
